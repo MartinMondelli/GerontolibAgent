@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GerontoLib">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#0b3d91">
+<meta name="description" content="GerontoLib: accessible, trilingual reading aid for aging and longevity research (Europe PMC).">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>GerontoLib</title>
+<style>
+:root{
+  --bg:#ffffff; --text:#111111; --muted:#333333; --line:#111111;
+  --primary:#0b3d91; --primary-text:#ffffff;
+  --green:#0a6b2d; --green-text:#ffffff;
+  --soft:#f1f4f9; --warn:#fff3c4;
+  --radius:.7rem;
+}
+html{font-size:20px}
+html[data-font="large"]{font-size:25px}
+html[data-font="xlarge"]{font-size:31px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:Verdana,Tahoma,Arial,sans-serif;line-height:1.55;font-size:1rem}
+h1{font-size:1.6rem;margin:0}
+h2{font-size:1.35rem;margin:.2rem 0 .8rem}
+h3{font-size:1.15rem;margin:0 0 .5rem;line-height:1.35}
+p{margin:.4rem 0}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;min-height:3rem;padding:.55rem 1rem;border:.15rem solid var(--line);
+  border-radius:var(--radius);background:#fff;font-weight:bold}
+button:hover{background:var(--soft)}
+:focus-visible{outline:.25rem solid #ff9800;outline-offset:.15rem}
+header{background:var(--primary);color:var(--primary-text);padding:.8rem 1rem}
+header .row{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between}
+.tagline{margin:.2rem 0 0;font-size:.9rem}
+.tools{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+.tools label{font-weight:bold;font-size:.85rem}
+.fontbtns{display:inline-flex;gap:.3rem}
+.fontbtns button{min-height:2.6rem;padding:.3rem .7rem;color:var(--text)}
+.fontbtns button[aria-pressed="true"]{background:#ffd54f;border-color:#000}
+select{min-height:2.6rem;padding:.3rem .5rem;border:.15rem solid var(--line);border-radius:var(--radius);background:#fff;color:#111}
+nav{display:flex;flex-wrap:wrap;gap:.5rem;padding:.7rem 1rem;background:var(--soft);border-bottom:.15rem solid var(--line)}
+nav button{flex:1 1 8rem}
+nav button[aria-selected="true"]{background:var(--primary);color:var(--primary-text)}
+main{max-width:60rem;margin:0 auto;padding:1rem}
+.panel[hidden]{display:none}
+.searchbar{display:flex;flex-wrap:wrap;gap:.6rem}
+.searchbar input[type=search]{flex:1 1 14rem;min-height:3.2rem;padding:.5rem .8rem;border:.18rem solid var(--line);border-radius:var(--radius)}
+.primary{background:var(--primary);color:var(--primary-text)}
+.primary:hover{background:#082c69}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.chips button{background:#fff;font-weight:normal;border-radius:2rem}
+.options{display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;margin:.6rem 0;font-size:.9rem}
+.options label{display:flex;gap:.4rem;align-items:center}
+.options input[type=checkbox]{width:1.3rem;height:1.3rem}
+.card{border:.15rem solid var(--line);border-radius:var(--radius);padding:1rem;margin:1rem 0;background:#fff}
+.meta{margin:.2rem 0;font-size:.9rem;color:var(--muted)}
+.meta b{color:var(--text)}
+.abstract{font-size:.9rem;margin:.5rem 0}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}
+.safe{display:inline-block;background:var(--green);color:var(--green-text);text-decoration:none;
+  font-weight:bold;padding:.7rem 1rem;border-radius:var(--radius);border:.15rem solid #064d1f;text-align:center}
+.safe:hover{background:#064d1f}
+.official{background:var(--primary);border-color:#082c69}
+.rate{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem}
+.rate button[aria-pressed="true"]{background:#ffd54f;border-width:.25rem}
+.notebox{margin-top:.8rem;background:var(--soft);padding:.7rem;border-radius:var(--radius)}
+.notebox[hidden]{display:none}
+textarea{width:100%;min-height:7rem;padding:.6rem;border:.15rem solid var(--line);border-radius:var(--radius);resize:vertical}
+.status{padding:.8rem;border-radius:var(--radius);background:var(--warn);border:.15rem solid #7a6400;margin:.8rem 0}
+.status[hidden]{display:none}
+.msg{font-weight:bold;color:var(--green);margin-left:.5rem}
+.toolbar{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0 1rem}
+.answer{border:.18rem solid var(--primary);border-radius:var(--radius);padding:1rem;margin:1rem 0;background:#f7faff}
+a{color:var(--primary);font-weight:bold}
+.notice{background:var(--warn);border:.15rem solid #7a6400;border-radius:var(--radius);padding:.7rem}
+details{border:.15rem solid var(--line);border-radius:var(--radius);padding:.6rem .9rem;margin:.8rem 0}
+summary{cursor:pointer;font-weight:bold;min-height:2.6rem;display:flex;align-items:center}
+.aibox label{display:block;font-weight:bold;margin-top:.6rem}
+.aibox input[type=password],.aibox input[type=text]{width:100%;min-height:3rem;padding:.4rem .7rem;border:.15rem solid var(--line);border-radius:var(--radius)}
+.aibox label.chk{display:flex;gap:.5rem;align-items:flex-start;font-weight:normal}
+.aibox label.chk input{width:1.4rem;height:1.4rem;flex:none;margin-top:.2rem}
+.bubble{border:.15rem solid var(--line);border-radius:var(--radius);padding:.7rem;margin:.6rem 0}
+.bubble.me{background:var(--soft)}
+.bubble.ai{background:#f7faff;border-color:var(--primary)}
+.bubble.err{background:#ffe3e3;border-color:#8a0000}
+.bubble .txt{white-space:pre-wrap;margin-top:.3rem}
+#chatInput{min-height:6rem}
+body{padding-bottom:6.5rem}
+#libSearch{width:100%;min-height:3.2rem;padding:.5rem .8rem;border:.18rem solid var(--line);border-radius:var(--radius);margin:.4rem 0}
+.orig{font-size:.8rem;color:var(--muted);font-style:italic;margin:.1rem 0 .4rem}
+.tbadge{font-size:.8rem;background:var(--soft);border-radius:.4rem;padding:.2rem .5rem;display:inline-block;margin:.1rem 0 .3rem}
+.trmsg{color:#8a0000;font-weight:bold;font-size:.85rem;margin:.3rem 0 0}
+.trmsg:empty{display:none}
+.hl{outline:.3rem solid #ff9800;background:#fff8e1}
+#micBtn{position:fixed;right:1rem;bottom:1rem;z-index:50;min-height:3.4rem;padding:.5rem 1.2rem;border-radius:3rem;
+  background:var(--primary);color:#fff;border:.2rem solid #fff;box-shadow:0 .2rem .8rem rgba(0,0,0,.45);font-size:1rem}
+#micBtn:hover{background:#082c69}
+#micBtn.on{background:#b00020;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 .7rem rgba(176,0,32,.3)}}
+@media (prefers-reduced-motion:reduce){#micBtn.on{animation:none}}
+#voiceBar{position:fixed;left:.7rem;right:.7rem;bottom:5.4rem;z-index:49;background:#111;color:#fff;border-radius:var(--radius);
+  padding:.5rem .7rem;display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;font-size:.9rem;max-height:40vh;overflow:auto}
+#voiceBar[hidden]{display:none}
+#voiceBar.err{background:#8a0000}
+#voiceBar #voiceText{flex:1 1 100%;font-weight:bold;line-height:1.3}
+#voiceBar button{min-height:2.4rem;padding:.2rem .7rem;font-size:.8rem;color:var(--text)}
+#voiceList{padding-left:1.2rem}
+#voiceList li{margin:.4rem 0}
+.control-widget{position:fixed;left:1rem;bottom:1rem;z-index:48}
+.control-widget-toggle{background:var(--green);color:var(--green-text);border-color:#064d1f;box-shadow:0 .2rem .8rem rgba(0,0,0,.35)}
+.control-widget-toggle:hover{background:#064d1f}
+.control-drawer{position:fixed;left:1rem;bottom:5.2rem;width:min(27rem,calc(100vw - 2rem));max-height:min(70vh,32rem);overflow:auto;
+  padding:1rem;background:#fff;border:.15rem solid var(--green);border-radius:var(--radius);box-shadow:0 .3rem 1rem rgba(0,0,0,.4)}
+.control-drawer[hidden]{display:none}
+.control-widget-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}
+.control-widget-heading h2{color:var(--green);margin:0}
+.control-widget-heading button{min-height:2.4rem;padding:.2rem .6rem}
+#controlInput{flex:1 1 14rem;min-width:0;min-height:3.2rem;padding:.5rem .8rem;border:.18rem solid var(--line);border-radius:var(--radius)}
+footer{max-width:60rem;margin:1rem auto;padding:1rem;font-size:.8rem;color:var(--muted)}
+.skip{position:absolute;left:-999px}.skip:focus{left:.5rem;top:.5rem;background:#fff;padding:.5rem;z-index:9}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i="skip">Ir al contenido</a>
+
+<header>
+  <div class="row">
+    <div>
+      <h1>GerontoLib</h1>
+      <p class="tagline" data-i="tagline"></p>
+    </div>
+    <div class="tools">
+      <div>
+        <label id="lblFont" data-i="fontSize"></label><br>
+        <span class="fontbtns" role="group" aria-labelledby="lblFont">
+          <button type="button" data-font="normal" data-i="fNormal"></button>
+          <button type="button" data-font="large" data-i="fLarge"></button>
+          <button type="button" data-font="xlarge" data-i="fXLarge"></button>
+        </span>
+      </div>
+      <div>
+        <label for="lang" data-i="language"></label><br>
+        <select id="lang">
+          <option value="es">Español</option>
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav role="tablist">
+  <button role="tab" id="tab-search" data-tab="search" data-i="tabSearch"></button>
+  <button role="tab" id="tab-library" data-tab="library" data-i="tabLibrary"></button>
+  <button role="tab" id="tab-notes" data-tab="notes" data-i="tabNotes"></button>
+  <button role="tab" id="tab-help" data-tab="help" data-i="tabHelp"></button>
+</nav>
+
+<main id="main">
+  <!-- ============ BUSCAR ============ -->
+  <section class="panel" id="panel-search" role="tabpanel">
+    <h2 data-i="searchTitle"></h2>
+    <form class="searchbar" id="searchForm">
+      <input type="search" id="q" data-ip="searchPlaceholder" aria-label="Buscar">
+      <button class="primary" type="submit" data-i="searchBtn"></button>
+    </form>
+    <div class="options">
+      <label><input type="checkbox" id="optOA" checked><span data-i="openOnly"></span></label>
+      <label><input type="checkbox" id="optAging" checked><span data-i="agingOnly"></span></label>
+      <label><span data-i="sortBy"></span>
+        <select id="sortSel"><option value="rel" data-i="sortRel"></option><option value="new" data-i="sortNew"></option></select>
+      </label>
+    </div>
+    <p><b data-i="quick"></b></p>
+    <div class="chips" id="chips"></div>
+    <div class="status" id="status" role="status" aria-live="polite" hidden></div>
+    <div id="results"></div>
+    <div class="toolbar"><button id="moreBtn" hidden data-i="more"></button></div>
+  </section>
+
+  <!-- ============ BIBLIOTECA ============ -->
+  <section class="panel" id="panel-library" role="tabpanel" hidden>
+    <h2 data-i="libTitle"></h2>
+    <p data-i="libIntro"></p>
+    <input type="search" id="libSearch" data-ip="libSearchPh" aria-label="Filtro">
+    <div class="options" style="margin:.6rem 0;">
+      <label><span data-i="filterJournal"></span>
+        <select id="libJournalFilter"><option value="" data-i="allJournals"></option></select>
+      </label>
+    </div>
+    <div class="chips" id="libFilters"></div>
+    <div id="libList"></div>
+  </section>
+
+  <!-- ============ NOTAS ============ -->
+  <section class="panel" id="panel-notes" role="tabpanel" hidden>
+    <h2 data-i="notesTitle"></h2>
+    <p data-i="notesIntro"></p>
+    <div class="toolbar">
+      <button class="primary" id="newFreeNote" data-i="newFreeNote"></button>
+      <button class="primary" id="expTxt" data-i="expTxt"></button>
+      <button id="expJson" data-i="expJson"></button>
+      <button id="impBtn" data-i="impBtn"></button>
+      <input type="file" id="impFile" accept=".json,application/json" hidden>
+    </div>
+    <div class="status" id="notesStatus" role="status" aria-live="polite" hidden></div>
+    <div id="notesList"></div>
+  </section>
+
+  <!-- ============ AYUDA / ASISTENTE / PANEL DE CONTROL ============ -->
+  <section class="panel" id="panel-help" role="tabpanel" hidden>
+    <h2 data-i="helpTitle"></h2>
+    <div class="aibox">
+      <p class="notice" data-i="aiNotice"></p>
+      
+      <details id="aiSettings">
+        <summary data-i="aiSettings"></summary>
+        <p data-i="aiKeyHelp"></p>
+        <p><a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" data-i="aiGetKey"></a></p>
+        <label for="aiKey" data-i="aiKeyLabel"></label>
+        <input type="password" id="aiKey" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <label for="aiModel" data-i="aiModelLabel"></label>
+        <input type="text" id="aiModel" list="aiModels" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <datalist id="aiModels"><option value="openai/gpt-oss-120b"></option><option value="openai/gpt-oss-20b"></option></datalist>
+        <label class="chk"><input type="checkbox" id="aiConsent"><span data-i="aiConsent"></span></label>
+        <label class="chk"><input type="checkbox" id="aiAuto"><span data-i="aiAuto"></span></label>
+        <div class="actions">
+          <button class="primary" type="button" id="aiSave" data-i="aiSave"></button>
+          <button type="button" id="aiRemove" data-i="aiRemove"></button>
+        </div>
+        <p class="msg" id="aiStatus" role="status"></p>
+      </details>
+      <div id="chatLog" aria-live="polite"></div>
+      <form id="chatForm" hidden>
+        <textarea id="chatInput" data-ip="aiPlaceholder" aria-label="Pregunta"></textarea>
+        <div class="actions">
+          <button class="primary" type="submit" data-i="aiSend"></button>
+          <button type="button" id="chatClear" data-i="aiClear"></button>
+        </div>
+      </form>
+    </div>
+    <details id="voiceHelp">
+      <summary data-i="voiceTitle"></summary>
+      <p data-i="voiceIntro"></p>
+      <ul id="voiceList"></ul>
+      <p data-i="voiceNote"></p>
+    </details>
+    <details id="glossBox">
+    <summary data-i="glossTitle"></summary>
+    <p data-i="helpIntro"></p>
+    <form class="searchbar" id="helpForm">
+      <input type="search" id="hq" data-ip="helpPlaceholder" aria-label="Pregunta">
+      <button class="primary" type="submit" data-i="helpBtn"></button>
+    </form>
+    <p><b data-i="helpTopics"></b></p>
+    <div class="chips" id="helpChips"></div>
+    <div id="helpAnswer"></div>
+    </details>
+  </section>
+</main>
+
+<aside class="control-widget" id="controlWidget">
+  <button type="button" class="control-widget-toggle" id="controlToggle" data-i="controlToggle"
+    aria-expanded="false" aria-controls="controlDrawer"></button>
+  <section class="control-drawer" id="controlDrawer" aria-labelledby="controlTitle" hidden>
+    <div class="control-widget-heading">
+      <h2 id="controlTitle" data-i="controlPanelTitle"></h2>
+      <button type="button" id="controlClose" data-ia="close">✕</button>
+    </div>
+    <p data-i="controlPanelDesc"></p>
+    <form id="controlForm" class="searchbar" style="margin-top:.6rem;">
+      <input type="text" id="controlInput" data-ip="controlPlaceholder" aria-label="Comando o instrucción">
+      <button class="primary" type="submit" data-i="controlExecBtn"></button>
+    </form>
+    <p class="msg" id="controlFeedback" role="status" style="margin-top:.4rem;"></p>
+  </section>
+</aside>
+
+<div id="voiceBar" role="status" aria-live="polite" hidden>
+  <span id="voiceText"></span>
+  <button type="button" id="voiceHelpBtn" data-i="voiceHelpBtn"></button>
+  <button type="button" id="voiceClose" data-ia="close">✕</button>
+</div>
+<button type="button" id="micBtn" aria-pressed="false">🎤</button>
+
+<footer><p data-i="privacy"></p><p data-i="privacy2"></p></footer>
+
+<script>
+const I18N = {
+es:{
+ skip:"Ir al contenido", tagline:"Su biblioteca científica sobre envejecimiento y longevidad",
+ fontSize:"Tamaño de letra", fNormal:"Normal", fLarge:"Grande", fXLarge:"Extra Grande", language:"Idioma",
+ tabSearch:"🔎 Buscar", tabLibrary:"📚 Biblioteca", tabNotes:"📝 Mis Notas", tabHelp:"❓ Ayuda",
+ searchTitle:"Buscar artículos científicos", searchPlaceholder:"Escriba una palabra, por ejemplo: Alzheimer",
+ searchBtn:"Buscar", openOnly:"Solo artículos de acceso abierto (texto completo gratis)",
+ agingOnly:"Limitar a temas de envejecimiento", sortBy:"Ordenar:", sortRel:"Más relevantes", sortNew:"Más recientes",
+ quick:"Temas rápidos (toque uno):", loading:"Buscando en Europe PMC…",
+ noResults:"No se encontraron artículos. Pruebe con otra palabra.",
+ error:"No se pudo conectar a Internet o al servidor de Europe PMC. Revise su conexión e intente de nuevo.",
+ more:"Mostrar más resultados", found:"Resultados encontrados:", showing:"mostrando",
+ authors:"Autores", journal:"Revista", year:"Año", source:"Fuente oficial", noAuthors:"No indicados", unknown:"No indicada",
+ safeBtn:"Sitio Seguro / Acceso Abierto (Libre de virus)", officialBtn:"Ver ficha oficial del artículo (Europe PMC)",
+ rate1:"⭐ Muy interesante", rate2:"👍 Interesante", rate3:"👎 No me interesa",
+ writeNote:"✍️ Escribir nota", hideNote:"Cerrar nota", saveNote:"Guardar nota", noteSaved:"✔ Nota guardada",
+ notePlaceholder:"Escriba aquí su opinión o comentario médico sobre este artículo…",
+ showAbs:"Ver resumen", hideAbs:"Ocultar resumen",
+ libTitle:"Mi Biblioteca", libIntro:"Aquí se guardan automáticamente los artículos que usted valoró o en los que escribió una nota.",
+ libEmpty:"Todavía no hay artículos. Valore un artículo en “Buscar” y aparecerá aquí.",
+ fAll:"Todos", rated:"Valoración", fInteresting:"Interesantes (⭐/👍)", fUninteresting:"No interesantes (👎)",
+ filterJournal:"Filtrar por revista:", allJournals:"Todas las revistas",
+ notesTitle:"Mis Notas Médicas", notesIntro:"Todas sus notas (de artículos o notas libres), de la más reciente a la más antigua.",
+ notesEmpty:"Todavía no tiene notas. Escriba una libre o desde cualquier artículo.",
+ newFreeNote:"✍️ Nueva nota libre", freeNoteTitle:"Nota personal / general",
+ expTxt:"💾 Exportar notas (texto)", expJson:"💾 Respaldo completo", impBtn:"📂 Restaurar respaldo",
+ delNote:"Borrar nota", confirmDel:"¿Seguro que desea borrar esta nota?", date:"Última modificación",
+ restoreOk:"✔ Respaldo restaurado correctamente.", restoreErr:"El archivo no es un respaldo válido de GerontoLib.",
+ helpTitle:"Asistente e intérprete inteligente", helpIntro:"Escriba un concepto científico y recibirá una explicación sin Internet.",
+ helpPlaceholder:"Escriba un concepto, por ejemplo: senolíticos", helpBtn:"Explicar", helpTopics:"Conceptos disponibles:",
+ helpNone:"No tengo una explicación guardada para esa palabra. Puede buscar artículos sobre ese tema.",
+ helpSearch:"🔎 Buscar artículos sobre este tema", simple:"En palabras simples",
+ controlToggle:"🎛️ Control", 
+ controlPanelTitle:"🎛️ Panel de control e intérprete de intenciones",
+ controlPanelDesc:"Escriba libremente lo que desea hacer (ej. 'busca sobre alzhéimer', 'pon la letra grande', 'muéstrame artículos interesantes de la revista Nature'):",
+ controlPlaceholder:"Escriba lo que quiera hacer o interpretar...",
+ controlExecBtn:"Ejecutar", controlUnknown:"No pude interpretar su instrucción. Intente con otra orden más clara.",
+ controlSuccess:"✔ Orden interpretada y ejecutada con éxito.",
+ privacy:"GerontoLib es gratuito. Sus valoraciones y notas se guardan solamente en este navegador y en esta computadora.",
+ aiNotice:"🤖 Las respuestas de este asistente las genera una inteligencia artificial (Groq). Pueden contener errores.",
+ aiSettings:"⚙️ Configurar el asistente de IA",
+ aiKeyHelp:"El asistente usa su propia clave gratuita de Groq.",
+ aiGetKey:"Obtener una clave gratuita en console.groq.com", aiKeyLabel:"Clave de Groq (empieza con gsk_)", aiModelLabel:"Modelo",
+ aiConsent:"Entiendo que mis preguntas se envían a Groq.",
+ aiSave:"Guardar configuración", aiRemove:"Borrar mi clave", aiSaved:"✔ Configuración guardada.", aiRemoved:"✔ Clave borrada.",
+ aiNeedKey:"Para usar el asistente: pegue su clave de Groq en la configuración y marque la casilla de aceptación.",
+ aiPlaceholder:"Escriba su pregunta...",
+ aiSend:"Preguntar", aiClear:"Borrar conversación", aiThinking:"Pensando…", aiYou:"Usted", aiBot:"🤖 Asistente IA",
+ aiErrKey:"La clave de Groq no es válida o fue rechazada.", aiErrRate:"Se alcanzó el límite gratuito de Groq.",
+ aiErrModel:"Groq no reconoce ese modelo.", aiErrNet:"No se pudo conectar con Groq.",
+ askAI:"🤖 Explicar con IA", glossTitle:"📖 Conceptos básicos sin conexión (sin IA)",
+ askPrompt:"Explíqueme en palabras sencillas este artículo científico:\nTítulo: {t}\nRevista: {j} ({y})\nResumen: {a}",
+ privacy2:"Asistente de IA (opcional). Código abierto, licencia MIT.",
+ close:"Cerrar", libSearchPh:"Filtrar mi biblioteca por título, autor o revista…",
+ trBtn:"🌐 Traducir", trAbs:"🌐 Traducir resumen", trBusy:"Traduciendo…", trShowOrig:"Ver original", trShowTr:"Ver traducción", original:"Original",
+ trNote:"Traducción automática ({by}).",
+ trErrQuota:"Se agotó el límite diario de la traducción gratuita.",
+ trErr:"No se pudo traducir.",
+ trConsentMM:"Sin el asistente de IA, el texto se enviará a MyMemory. ¿Desea continuar?",
+ aiAuto:"Traducir automáticamente los títulos de los resultados (usa la IA)",
+ micBtn:"🎤 Voz", micOn:"🔴 Escuchando…", voiceListening:"🎤 Escuchando… hable ahora",
+ voiceNoSupport:"Su navegador no permite comandos de voz.",
+ voiceConsent:"Para entender su voz, el navegador envía el audio al servicio de reconocimiento de voz. ¿Desea continuar?",
+ voiceErrPerm:"No hay permiso para usar el micrófono.",
+ voiceErrNet:"El reconocimiento de voz necesita Internet.", voiceNoSpeech:"No escuché nada.", voiceErr:"Error de voz",
+ voiceUnknown:"No entendí: “{x}”.", voiceHelpBtn:"Ver comandos", voiceOk:"Listo", voiceSearching:"Buscando",
+ voiceNoMore:"No hay más resultados para mostrar.", voiceLibFound:"Biblioteca: {n} artículo(s) con “{q}”",
+ voiceLibNone:"No hay artículos con “{q}” en su biblioteca.",
+ voiceTitle:"🎤 Comandos de voz inteligentes", voiceIntro:"Toque el botón 🎤 y hable con libertad. Ejemplos:",
+ voiceList:["“Búscame artículos sobre el alzhéimer”","“Quiero ver mi biblioteca”","“Pon la letra extra grande”","“Cambiar idioma a inglés”","“Muéstrame más resultados”"],
+ voiceNote:"Funciona interpretando libremente lo que dice.",
+ cats:{sen:"Senolíticos",tel:"Telómeros",neu:"Neuroprotección",cal:"Restricción calórica",aut:"Autofagia",alz:"Alzheimer",lon:"Longevity"}
+},
+en:{
+ skip:"Skip to content", tagline:"Your scientific library on aging and longevity",
+ fontSize:"Text size", fNormal:"Normal", fLarge:"Large", fXLarge:"Extra Large", language:"Language",
+ tabSearch:"🔎 Search", tabLibrary:"📚 Library", tabNotes:"📝 My Notes", tabHelp:"❓ Help",
+ searchTitle:"Search scientific articles", searchPlaceholder:"Type a word, for example: Alzheimer",
+ searchBtn:"Search", openOnly:"Open-access articles only (free full text)",
+ agingOnly:"Limit to aging topics", sortBy:"Sort:", sortRel:"Most relevant", sortNew:"Most recent",
+ quick:"Quick topics (tap one):", loading:"Searching Europe PMC…",
+ noResults:"No articles found. Try another word.",
+ error:"Could not reach the Internet or the Europe PMC server.",
+ more:"Show more results", found:"Results found:", showing:"showing",
+ authors:"Authors", journal:"Journal", year:"Year", source:"Official source", noAuthors:"Not listed", unknown:"Not listed",
+ safeBtn:"Safe Site / Open Access (Virus-free)", officialBtn:"View official article record (Europe PMC)",
+ rate1:"⭐ Very interesting", rate2:"👍 Interesting", rate3:"👎 Not interested",
+ writeNote:"✍️ Write note", hideNote:"Close note", saveNote:"Save note", noteSaved:"✔ Note saved",
+ notePlaceholder:"Write your opinion or medical comment about this article here…",
+ showAbs:"Show abstract", hideAbs:"Hide abstract",
+ libTitle:"My Library", libIntro:"Articles you rated or wrote a note on are saved here automatically.",
+ libEmpty:"No articles yet. Rate an article in “Search” and it will appear here.",
+ fAll:"All", rated:"Rating", fInteresting:"Interesting (⭐/👍)", fUninteresting:"Not interesting (👎)",
+ filterJournal:"Filter by journal:", allJournals:"All journals",
+ notesTitle:"My Medical Notes", notesIntro:"All your notes, newest first.",
+ notesEmpty:"You have no notes yet. Write a free note or from any article.",
+ newFreeNote:"✍️ New free note", freeNoteTitle:"Personal / general note",
+ expTxt:"💾 Export notes (text)", expJson:"💾 Full backup", impBtn:"📂 Restore backup",
+ delNote:"Delete note", confirmDel:"Are you sure you want to delete this note?", date:"Last modified",
+ restoreOk:"✔ Backup restored successfully.", restoreErr:"This file is not a valid GerontoLib backup.",
+ helpTitle:"Assistant and Smart Interpreter", helpIntro:"Type a scientific concept and get an explanation.",
+ helpPlaceholder:"Type a concept, for example: senolytics", helpBtn:"Explain", helpTopics:"Available concepts:",
+ helpNone:"I have no saved explanation for that word.",
+ helpSearch:"🔎 Search articles on this topic", simple:"In simple words",
+ controlToggle:"🎛️ Control",
+ controlPanelTitle:"🎛️ Control Panel & Intent Interpreter",
+ controlPanelDesc:"Type freely what you want to do (e.g. 'search for Alzheimer', 'make text large', 'show interesting articles from Nature'):",
+ controlPlaceholder:"Type your command or intention...",
+ controlExecBtn:"Run", controlUnknown:"Could not interpret your instruction. Try a clearer command.",
+ controlSuccess:"✔ Command interpreted and executed successfully.",
+ privacy:"GerontoLib is free. Your ratings and notes are stored only in this browser.",
+ aiNotice:"🤖 Answers generated by artificial intelligence (Groq).",
+ aiSettings:"⚙️ Set up the AI assistant",
+ aiKeyHelp:"The assistant uses your own free Groq key.",
+ aiGetKey:"Get a free key at console.groq.com", aiKeyLabel:"Groq key", aiModelLabel:"Model",
+ aiConsent:"I understand my questions are sent to Groq.",
+ aiSave:"Save settings", aiRemove:"Delete my key", aiSaved:"✔ Settings saved.", aiRemoved:"✔ Key deleted.",
+ aiNeedKey:"To use the assistant: paste your Groq key.",
+ aiPlaceholder:"Type your question...",
+ aiSend:"Ask", aiClear:"Clear conversation", aiThinking:"Thinking…", aiYou:"You", aiBot:"🤖 AI assistant",
+ aiErrKey:"The Groq key is invalid.", aiErrRate:"Groq limit reached.",
+ aiErrModel:"Model not recognized.", aiErrNet:"Could not connect to Groq.",
+ askAI:"🤖 Explain with AI", glossTitle:"📖 Basic concepts offline",
+ askPrompt:"Explain this scientific article in simple words:\nTitle: {t}\nJournal: {j} ({y})\nAbstract: {a}",
+ privacy2:"AI assistant (optional). Open source, MIT license.",
+ close:"Close", libSearchPh:"Filter my library by title, author or journal…",
+ trBtn:"🌐 Translate", trAbs:"🌐 Translate abstract", trBusy:"Translating…", trShowOrig:"Show original", trShowTr:"Show translation", original:"Original",
+ trNote:"Machine translation ({by}).",
+ trErrQuota:"Daily translation limit reached.",
+ trErr:"Could not translate.",
+ trConsentMM:"Text will be sent to MyMemory. Continue?",
+ aiAuto:"Automatically translate result titles (uses AI)",
+ micBtn:"🎤 Voice", micOn:"🔴 Listening…", voiceListening:"🎤 Listening… speak now",
+ voiceNoSupport:"Your browser does not support voice commands.",
+ voiceConsent:"To understand your voice, audio is sent to speech recognition. Continue?",
+ voiceErrPerm:"Microphone permission missing.",
+ voiceErrNet:"Speech recognition needs Internet.", voiceNoSpeech:"I heard nothing.", voiceErr:"Voice error",
+ voiceUnknown:"I did not understand: “{x}”.", voiceHelpBtn:"Show commands", voiceOk:"Done", voiceSearching:"Searching",
+ voiceNoMore:"There are no more results to show.", voiceLibFound:"Library: {n} article(s) matching “{q}”",
+ voiceLibNone:"No articles matching “{q}” in your library.",
+ voiceTitle:"🎤 Smart Voice Commands", voiceIntro:"Tap 🎤 and speak freely. Examples:",
+ voiceList:["“Search for Alzheimer articles”","“Open my library”","“Make text extra large”","“Switch language to French”","“Show more results”"],
+ voiceNote:"Interprets speech naturally.",
+ cats:{sen:"Senolytics",tel:"Telomeres",neu:"Neuroprotection",cal:"Caloric restriction",aut:"Autophagy",alz:"Alzheimer's",lon:"Longevity"}
+},
+fr:{
+ skip:"Aller au contenu", tagline:"Votre bibliothèque scientifique sur le vieillissement et la longévité",
+ fontSize:"Taille du texte", fNormal:"Normal", fLarge:"Grand", fXLarge:"Très grand", language:"Langue",
+ tabSearch:"🔎 Rechercher", tabLibrary:"📚 Bibliothèque", tabNotes:"📝 Mes Notes", tabHelp:"❓ Aide",
+ searchTitle:"Rechercher des articles scientifiques", searchPlaceholder:"Tapez un mot, par exemple : Alzheimer",
+ searchBtn:"Rechercher", openOnly:"Articles en accès libre uniquement",
+ agingOnly:"Limiter au vieillissement", sortBy:"Trier :", sortRel:"Plus pertinents", sortNew:"Plus récents",
+ quick:"Thèmes rapides (touchez-en un) :", loading:"Recherche dans Europe PMC…",
+ noResults:"Aucun article trouvé.",
+ error:"Impossible de se connecter à Internet.",
+ more:"Afficher plus de résultats", found:"Résultats trouvés :", showing:"affichés",
+ authors:"Auteurs", journal:"Revue", year:"Année", source:"Source officielle", noAuthors:"Non indiqués", unknown:"Non indiquée",
+ safeBtn:"Site Sûr / Accès Libre", officialBtn:"Voir la fiche officielle (Europe PMC)",
+ rate1:"⭐ Très intéressant", rate2:"👍 Intéressant", rate3:"👎 Pas intéressé",
+ writeNote:"✍️ Écrire une note", hideNote:"Fermer la note", saveNote:"Enregistrer la note", noteSaved:"✔ Note enregistrée",
+ notePlaceholder:"Écrivez ici votre avis…",
+ showAbs:"Voir le résumé", hideAbs:"Masquer le résumé",
+ libTitle:"Ma Bibliothèque", libIntro:"Articles évalués ou annotés.",
+ libEmpty:"Aucun article pour l'instant.",
+ fAll:"Todos", rated:"Évaluation", fInteresting:"Intéressants (⭐/👍)", fUninteresting:"Pas intéressés (👎)",
+ filterJournal:"Filtrer par revue :", allJournals:"Toutes les revues",
+ notesTitle:"Mes Notes Médicales", notesIntro:"Toutes vos notes, de la plus récente à la plus ancienne.",
+ notesEmpty:"Aucune note pour l'instant.",
+ newFreeNote:"✍️ Nouvelle note libre", freeNoteTitle:"Note personnelle / générale",
+ expTxt:"💾 Exporter les notes (texte)", expJson:"💾 Sauvegarde complète", impBtn:"📂 Restaurer une sauvegarde",
+ delNote:"Supprimer la note", confirmDel:"Voulez-vous vraiment supprimer cette note ?", date:"Dernière modification",
+ restoreOk:"✔ Sauvegarde restaurée avec succès.", restoreErr:"Ce fichier n'est pas valide.",
+ helpTitle:"Assistant et Interprète Intelligent", helpIntro:"Tapez un concept scientifique.",
+ helpPlaceholder:"Tapez un concept...", helpBtn:"Expliquer", helpTopics:"Concepts disponibles :",
+ helpNone:"Aucune explication trouvée.",
+ helpSearch:"🔎 Chercher des articles sur ce thème", simple:"En mots simples",
+ controlToggle:"🎛️ Contrôle",
+ controlPanelTitle:"🎛️ Panneau de contrôle et Interprète d'intentions",
+ controlPanelDesc:"Écrivez librement ce que vous souhaitez faire (ex. 'cherche Alzheimer', 'mets le texte en grand'):",
+ controlPlaceholder:"Écrivez votre commande ou intention...",
+ controlExecBtn:"Exécuter", controlUnknown:"Impossible d'interpréter votre instruction.",
+ controlSuccess:"✔ Commande interprétée et exécutée avec succès.",
+ privacy:"GerontoLib est gratuit. Vos données restent sur votre navigateur.",
+ aiNotice:"🤖 Réponses générées par IA (Groq).",
+ aiSettings:"⚙️ Configurer l'assistant IA",
+ aiKeyHelp:"L'assistant utilise votre clé Groq.",
+ aiGetKey:"Obtenir une clé sur console.groq.com", aiKeyLabel:"Clé Groq", aiModelLabel:"Modèle",
+ aiConsent:"Je comprends que mes questions sont envoyées à Groq.",
+ aiSave:"Enregistrer", aiRemove:"Supprimer", aiSaved:"✔ Configuration enregistrée.", aiRemoved:"✔ Clé supprimée.",
+ aiNeedKey:"Collez votre clé Groq.",
+ aiPlaceholder:"Tapez votre question...",
+ aiSend:"Demander", aiClear:"Effacer", aiThinking:"Réflexion…", aiYou:"Vous", aiBot:"🤖 Assistant IA",
+ aiErrKey:"Clé Groq invalide.", aiErrRate:"Limite Groq atteinte.",
+ aiErrModel:"Modèle non reconnu.", aiErrNet:"Erreur de connexion.",
+ askAI:"🤖 Expliquer avec l'IA", glossTitle:"📖 Notions de base hors ligne",
+ askPrompt:"Expliquez cet article en mots simples :\nTitre : {t}\nRevue : {j} ({y})\nRésumé : {a}",
+ privacy2:"Assistant IA (facultatif). Licence MIT.",
+ close:"Fermer", libSearchPh:"Filtrer ma bibliothèque...",
+ trBtn:"🌐 Traduire", trAbs:"🌐 Traduire le résumé", trBusy:"Traduction…", trShowOrig:"Voir l'original", trShowTr:"Voir la traduction", original:"Original",
+ trNote:"Traduction automatique ({by}).",
+ trErrQuota:"Limite de traduction atteinte.",
+ trErr:"Traduction impossible.",
+ trConsentMM:"Le texte sera envoyé à MyMemory. Continuer ?",
+ aiAuto:"Traduire automatiquement les titres",
+ micBtn:"🎤 Voix", micOn:"🔴 J'écoute…", voiceListening:"🎤 J'écoute… parlez maintenant",
+ voiceNoSupport:"Votre navigateur ne prend pas en charge la voix.",
+ voiceConsent:"L'audio sera envoyé à la reconnaissance vocale. Continuer ?",
+ voiceErrPerm:"Accès au micro refusé.",
+ voiceErrNet:"Internet requis.", voiceNoSpeech:"Rien entendu.", voiceErr:"Erreur vocale",
+ voiceUnknown:"Je n'ai pas compris : « {x} ».", voiceHelpBtn:"Commandes", voiceOk:"Fait", voiceSearching:"Recherche",
+ voiceNoMore:"Plus de résultats.", libFound:"Bibliothèque : {n} article(s)",
+ voiceLibNone:"Aucun article trouvé dans la bibliothèque.",
+ voiceTitle:"🎤 Commandes vocales intelligentes", voiceIntro:"Touchez 🎤 et parlez librement. Exemples :",
+ voiceList:["« Cherche des articles sur Alzheimer »","« Ouvre ma bibliothèque »","« Mets le texte en très grand »","« Change la langue en espagnol »","« Plus de résultats »"],
+ voiceNote:"Interprétation naturelle.",
+ cats:{sen:"Sénolytiques",tel:"Télomères",neu:"Neuroprotection",cal:"Restriction calorique",aut:"Autophagie",alz:"Alzheimer",lon:"Longévité"}
+}};
+
+const CATEGORIES = [
+ {id:"sen", q:'(senolytics OR "cellular senescence" OR senolytic)'},
+ {id:"tel", q:'(telomere OR telomeres OR telomerase)'},
+ {id:"neu", q:'(neuroprotection OR neuroprotective OR "neurodegeneration")'},
+ {id:"cal", q:'("caloric restriction" OR "calorie restriction" OR "intermittent fasting")'},
+ {id:"aut", q:'(autophagy OR mitophagy)'},
+ {id:"alz", q:'("Alzheimer disease" OR "Alzheimer\'s disease")'},
+ {id:"lon", q:'(longevity OR lifespan OR healthspan)'}
+];
+
+const DICT = {
+ "envejecimiento":"aging","vieillissement":"aging","longevidad":"longevity","longevite":"longevity",
+ "telomeros":"telomere","telomeres":"telomere","senoliticos":"senolytics","senolytiques":"senolytics",
+ "metabolismo":"metabolism","metabolisme":"metabolism","memoria":"memory","memoire":"memory",
+ "corazon":"heart","coeur":"heart","cerebro":"brain","cerveau":"brain","sueno":"sleep","sommeil":"sleep",
+ "ejercicio":"exercise","exercice":"exercise","dieta":"diet","alimentacion":"diet","alimentation":"diet",
+ "ayuno":"fasting","jeune":"fasting","inflamacion":"inflammation","musculo":"muscle","huesos":"bone","hueso":"bone","os":"bone",
+ "cancer":"cancer","demencia":"dementia","demence":"dementia","vitamina":"vitamin","mitocondria":"mitochondria",
+ "mitocondrias":"mitochondria","mitocondrie":"mitochondrie","celulas madre":"stem cells","cellules souches":"stem cells",
+ "genetica":"genetics","genetique":"genetics","hipertension":"hypertension","obesidad":"obesity","obesite":"obesite",
+ "intestino":"gut","microbiota":"microbiome","proteina":"protein","proteine":"proteine","sarcopenia":"sarcopenia",
+ "restriccion calorica":"caloric restriction","restriction calorique":"caloric restriction","autofagia":"autophagy","autophagie":"autophagie",
+ "neuroproteccion":"neuroprotection","vision":"vision","audicion":"hearing","ouie":"hearing","piel":"skin","peau":"peau",
+ "diabetes":"diabetes","parkinson":"parkinson","osteoporosis":"osteoporosis","osteoporose":"osteoporose","estres":"stress","stress":"stress",
+ "melatonina":"melatonin","mélatonine":"mélatonine","metformina":"metformin","metformine":"metformine","rapamicina":"rapamycin","rapamycine":"rapamycine"
+};
+const stripAcc = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+
+function toEnglish(text){
+  let s = " " + stripAcc(text) + " ";
+  Object.keys(DICT).sort((a,b)=>b.length-a.length).forEach(k=>{
+    s = s.split(" "+k+" ").join(" "+DICT[k]+" ");
+  });
+  return s.trim();
+}
+
+const GLOSSARY = [
+ {k:["senolitico","senolytic","senolytique","senescencia","senescence","senescente"],
+  n:{es:"Senolíticos y senescencia celular",en:"Senolytics and cellular senescence",fr:"Sénolytiques et sénescence cellulaire"},
+  q:"senolytics",
+  d:{es:"Con los años, algunas células dejan de dividirse pero no mueren: son las células “senescentes”. Los senolíticos buscan eliminarlas selectivamente.",
+     en:"With age, some cells stop dividing but do not die: senescent cells. Senolytics seek to remove them.",
+     fr:"Avec l'âge, certaines cellules cessent de se diviser : cellules sénescentes."}},
+ {k:["telomero","telomere","telomerasa","telomerase"],
+  n:{es:"Telómeros",en:"Telomeres",fr:"Télomères"}, q:"telomere",
+  d:{es:"Tapas protectoras en los extremos de los cromosomas que se acortan con la división celular.",
+     en:"Protective caps at the ends of chromosomes that shorten with cell division.",
+     fr:"Capuchons protecteurs aux extrémités des chromosomes."}}
+];
+
+const KEY = "gerontolib_v2";
+let DB = { lang:"es", font:"normal", items:{}, freeNotes:{} };
+function loadDB(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){ const o = JSON.parse(raw); if(o && typeof o==="object") DB = Object.assign(DB,o); }
+  }catch(e){ console.warn("localStorage error",e); }
+}
+function saveDB(){
+  try{ localStorage.setItem(KEY, JSON.stringify(DB)); }catch(e){ console.warn("Save error",e); }
+}
+const T = k => (I18N[DB.lang] && I18N[DB.lang][k]) || I18N.es[k] || k;
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const stripTags = s => String(s||"").replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").trim();
+
+function applyLang(){
+  document.documentElement.lang = DB.lang;
+  $$("[data-i]").forEach(el=>{ el.textContent = T(el.dataset.i); });
+  $$("[data-ip]").forEach(el=>{ el.placeholder = T(el.dataset.ip); });
+  $$("[data-ia]").forEach(el=>{ el.setAttribute("aria-label", T(el.dataset.ia)); });
+  $("#lang").value = DB.lang;
+  buildChips(); buildHelpChips();
+  renderLibrary(); renderNotes();
+  rerenderResults();
+  if(lastHelp) showHelp(lastHelp);
+  updateAI();
+  renderVoiceHelp(); updateVoiceUI(); autoTranslateTitles();
+}
+function applyFont(){
+  document.documentElement.dataset.font = DB.font;
+  $$(".fontbtns button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.font===DB.font));
+}
+
+function showTab(name){
+  ["search","library","notes","help"].forEach(n=>{
+    $("#panel-"+n).hidden = n!==name;
+    $("#tab-"+n).setAttribute("aria-selected", n===name);
+  });
+  if(name==="library") renderLibrary();
+  if(name==="notes") renderNotes();
+  window.scrollTo({top:0});
+}
+
+const API = "https://www.ebi.ac.uk/europepmc/webservices/rest/search";
+const PAGE_SIZE = 10;
+let seen = {};
+let order = [];
+let current = {query:"", raw:false, cursorMark:"", total:0};
+let searchRequestId = 0;
+let searchController = null;
+let searchLoading = false;
+
+function buildChips(){
+  const box = $("#chips"); box.innerHTML = "";
+  CATEGORIES.forEach(c=>{
+    const b = document.createElement("button");
+    b.type="button"; b.textContent = T("cats")[c.id];
+    b.addEventListener("click",()=>{ $("#q").value = T("cats")[c.id]; runSearch(c.q, true); });
+    box.appendChild(b);
+  });
+}
+
+function buildQuery(base, isRaw){
+  let q = isRaw ? base : "(" + toEnglish(base) + ")";
+  if($("#optAging").checked && !isRaw) q += " AND (aging OR ageing OR longevity OR senescence OR elderly)";
+  if($("#optOA").checked) q += " AND OPEN_ACCESS:y";
+  return q;
+}
+
+async function runSearch(base, isRaw, append){
+  base = (base||"").trim(); if(!base) return;
+  if(append && (searchLoading || !current.cursorMark)) return;
+  if(!append){
+    if(searchController) searchController.abort();
+    current = {query:base, raw:!!isRaw, cursorMark:"*", total:0};
+    order=[]; $("#results").innerHTML="";
+  }
+  const requestId = ++searchRequestId;
+  const requestCursor = current.cursorMark;
+  const controller = new AbortController();
+  searchController = controller;
+  searchLoading = true;
+  let timeoutId;
+  const st = $("#status"); st.hidden=false; st.textContent = T("loading");
+  $("#moreBtn").hidden = true;
+  const url = API + "?query=" + encodeURIComponent(buildQuery(current.query, current.raw)) +
+    "&format=json&resultType=core&pageSize=" + PAGE_SIZE + "&cursorMark=" + encodeURIComponent(requestCursor) +
+    ($("#sortSel").value==="new" ? "&sort=" + encodeURIComponent("P_PDATE_D desc") : "");
+  try{
+    timeoutId = setTimeout(()=>controller.abort(), 20000);
+    const res = await fetch(url, {signal:controller.signal});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const data = await res.json();
+    if(requestId !== searchRequestId) return;
+    current.total = data.hitCount || 0;
+    current.cursorMark = data.nextCursorMark || "";
+    const list = (data.resultList && data.resultList.result) || [];
+    list.forEach(r=>{ const a = normalize(r); if(!seen[a.id]) seen[a.id]=a; if(!order.includes(a.id)) order.push(a.id); });
+    if(!order.length){ st.textContent = T("noResults"); return; }
+    st.textContent = T("found")+" "+current.total.toLocaleString(DB.lang)+" ("+T("showing")+" "+order.length+")";
+    rerenderResults();
+    $("#moreBtn").hidden = !current.cursorMark || current.cursorMark === requestCursor;
+    autoTranslateTitles();
+  }catch(e){
+    if(requestId !== searchRequestId) return;
+    console.warn(e); st.hidden=false;
+    st.textContent = T("error") + " [" + (e && e.name==="AbortError" ? "timeout" : (e && e.message) || "error") + "]";
+    $("#moreBtn").hidden = !append || !current.cursorMark;
+  }finally{
+    clearTimeout(timeoutId);
+    if(requestId === searchRequestId){
+      searchLoading = false;
+      searchController = null;
+    }
+  }
+}
+
+function normalize(r){
+  const id = (r.source||"MED") + ":" + (r.id||r.pmid||r.pmcid||r.doi);
+  const pmcid = r.pmcid || "";
+  let url;
+  if(pmcid) url = "https://pmc.ncbi.nlm.nih.gov/articles/" + pmcid + "/";
+  else url = "https://europepmc.org/article/" + (r.source||"MED") + "/" + (r.id||"");
+  const free = !!pmcid || r.isOpenAccess==="Y" || r.inEPMC==="Y";
+  return {
+    id, title: stripTags(r.title)||"(sin título)",
+    authors: stripTags(r.authorString)||"",
+    journal: stripTags((r.journalInfo&&r.journalInfo.journal&&r.journalInfo.journal.title)||r.journalTitle||""),
+    year: r.pubYear || (r.journalInfo&&r.journalInfo.yearOfPublication) || "",
+    sourceName: "Europe PMC" + (pmcid? " · "+pmcid : (r.pmid? " · PMID "+r.pmid : "")),
+    url, free,
+    lang: r.language || "eng",
+    abstract: stripTags(r.abstractText||"").slice(0,2500)
+  };
+}
+
+function getArticle(id){ return seen[id] || (DB.items[id] && DB.items[id].article); }
+
+function shownTitle(a){
+  const tr = getTR(a.id);
+  return (tr && tr.t && !origView.has(a.id)) ? tr.t : a.title;
+}
+
+function cardHTML(a){
+  const it = DB.items[a.id] || {};
+  const r = it.rating || "";
+  const hasNote = !!(it.note && it.note.trim());
+  const tr = getTR(a.id);
+  const showTr = !!(tr && tr.t && !origView.has(a.id));
+  const absText = (showTr && tr.a) ? tr.a : a.abstract;
+  const link = a.free
+    ? `<a class="safe" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">🔒 ${esc(T("safeBtn"))}</a>`
+    : `<a class="safe official" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">${esc(T("officialBtn"))}</a>`;
+  const abs = absText ? `
+    <div class="actions"><button type="button" data-act="abs">${esc(T("showAbs"))}</button></div>
+    <p class="abstract" hidden>${esc(absText)}</p>` : "";
+  let trBtns = "";
+  if(trBusy.has(a.id)){
+    trBtns = `<button type="button" disabled>${esc(T("trBusy"))}</button>`;
+  }else{
+    if(needsTranslation(a) && (!tr || (!tr.a && a.abstract)))
+      trBtns += `<button type="button" data-act="tr">${esc(T(tr ? "trAbs" : "trBtn"))}</button>`;
+    if(tr)
+      trBtns += `<button type="button" data-act="orig">${esc(origView.has(a.id) ? T("trShowTr") : T("trShowOrig"))}</button>`;
+  }
+  const trInfo = showTr ? `
+    <p class="orig">${esc(T("original"))}: ${esc(a.title)}</p>
+    <p class="tbadge">🌐 ${esc(T("trNote").replace("{by}", () => tr.by || ""))}</p>` : "";
+  return `
+  <article class="card" data-id="${esc(a.id)}">
+    <h3>${esc(shownTitle(a))}</h3>${trInfo}
+    <p class="meta"><b>${esc(T("authors"))}:</b> ${esc(a.authors||T("noAuthors"))}</p>
+    <p class="meta"><b>${esc(T("journal"))}:</b> ${esc(a.journal||T("unknown"))}</p>
+    <p class="meta"><b>${esc(T("year"))}:</b> ${esc(a.year||T("unknown"))}</p>
+    <p class="meta"><b>${esc(T("source"))}:</b> ${esc(a.sourceName)}</p>
+    ${abs}
+    <div class="actions">${link}${trBtns}</div>
+    <p class="trmsg" role="status"></p>
+    <div class="rate" role="group">
+      <button type="button" data-act="rate" data-r="2" aria-pressed="${r==="2"}">${esc(T("rate1"))}</button>
+      <button type="button" data-act="rate" data-r="1" aria-pressed="${r==="1"}">${esc(T("rate2"))}</button>
+      <button type="button" data-act="rate" data-r="0" aria-pressed="${r==="0"}">${esc(T("rate3"))}</button>
+      <button type="button" data-act="note">${esc(hasNote? "📝 ":"")}${esc(T("writeNote"))}</button>
+      <button type="button" data-act="ask">${esc(T("askAI"))}</button>
+    </div>
+    <div class="notebox" hidden>
+      <textarea placeholder="${esc(T("notePlaceholder"))}" aria-label="${esc(T("writeNote"))}">${esc(it.note||"")}</textarea>
+      <div class="actions"><button type="button" class="primary" data-act="save">${esc(T("saveNote"))}</button><span class="msg" role="status"></span></div>
+    </div>
+  </article>`;
+}
+
+function rerenderResults(){
+  const box = $("#results");
+  if(!box) return;
+  box.innerHTML = order.map(id=>cardHTML(seen[id])).join("");
+}
+
+function ensureItem(id){
+  if(!DB.items[id]){ DB.items[id] = {article:getArticle(id), rating:"", note:"", noteDate:""}; }
+  return DB.items[id];
+}
+function pruneItem(id){
+  const it = DB.items[id];
+  if(it && it.rating==="" && !(it.note||"").trim()) delete DB.items[id];
+}
+
+document.addEventListener("click", ev=>{
+  const btn = ev.target.closest("[data-act]"); if(!btn) return;
+  const card = btn.closest(".card"); if(!card) return;
+  const id = card.dataset.id, act = btn.dataset.act;
+  if(act==="abs"){
+    const p = card.querySelector(".abstract"); p.hidden = !p.hidden;
+    btn.textContent = p.hidden ? T("showAbs") : T("hideAbs");
+  }
+  else if(act==="rate"){
+    const it = ensureItem(id);
+    it.rating = (it.rating===btn.dataset.r) ? "" : btn.dataset.r;
+    pruneItem(id); saveDB();
+    card.querySelectorAll('[data-act="rate"]').forEach(b=>b.setAttribute("aria-pressed", (DB.items[id]||{}).rating===b.dataset.r));
+    if(card.closest("#libList")) renderLibrary();
+  }
+  else if(act==="note"){
+    const nb = card.querySelector(".notebox"); nb.hidden = !nb.hidden;
+    if(!nb.hidden) nb.querySelector("textarea").focus();
+  }
+  else if(act==="save"){
+    const txt = card.querySelector("textarea").value.trim();
+    const it = ensureItem(id);
+    it.note = txt; it.noteDate = txt ? new Date().toISOString() : "";
+    pruneItem(id); saveDB();
+    const m = card.querySelector(".msg"); m.textContent = T("noteSaved");
+    setTimeout(()=>{ m.textContent=""; }, 2500);
+    if(card.closest("#notesList")) setTimeout(renderNotes, 600);
+  }
+  else if(act==="tr"){ translateArticle(id); }
+  else if(act==="orig"){ if(origView.has(id)) origView.delete(id); else origView.add(id); refreshCard(id); }
+  else if(act==="ask"){
+    const a = getArticle(id); if(a) askAboutArticle(a);
+  }
+  else if(act==="delnote"){
+    if(!confirm(T("confirmDel"))) return;
+    const it = DB.items[id]; if(it){ it.note=""; it.noteDate=""; pruneItem(id); saveDB(); }
+    renderNotes();
+  }
+  else if(act==="delfreenote"){
+    if(!confirm(T("confirmDel"))) return;
+    delete DB.freeNotes[id]; saveDB();
+    renderNotes();
+  }
+});
+
+let libFilter = "all";
+let libQuery = "";
+let libJournal = "";
+
+function updateJournalDropdown(){
+  const sel = $("#libJournalFilter");
+  if(!sel) return;
+  const journals = new Set();
+  Object.values(DB.items).forEach(it=>{ if(it.article && it.article.journal) journals.add(it.article.journal); });
+  const currentVal = sel.value;
+  sel.innerHTML = `<option value="">${esc(T("allJournals"))}</option>` +
+    Array.from(journals).sort().map(j=>`<option value="${esc(j)}"${j===currentVal?" selected":""}>${esc(j)}</option>`).join("");
+}
+
+function renderLibrary(){
+  updateJournalDropdown();
+  const f = $("#libFilters"); f.innerHTML = "";
+  [["all",T("fAll")],["interesting",T("fInteresting")],["uninteresting",T("fUninteresting")],["2",T("rate1")],["1",T("rate2")],["0",T("rate3")]].forEach(([v,label])=>{
+    const b = document.createElement("button"); b.type="button"; b.textContent=label;
+    b.setAttribute("aria-pressed", libFilter===v);
+    if(libFilter===v){ b.style.background="#ffd54f"; }
+    b.addEventListener("click",()=>{ libFilter=v; renderLibrary(); });
+    f.appendChild(b);
+  });
+  
+  const items = Object.values(DB.items).filter(it=>{
+    if(!it.article) return false;
+    if(libFilter==="interesting" && it.rating !== "2" && it.rating !== "1") return false;
+    if(libFilter==="uninteresting" && it.rating !== "0") return false;
+    if(libFilter !== "all" && libFilter !== "interesting" && libFilter !== "uninteresting" && it.rating !== libFilter) return false;
+    if(libJournal && it.article.journal !== libJournal) return false;
+    return matchesQuery(it.article, libQuery);
+  });
+  items.sort((a,b)=>(b.noteDate||"").localeCompare(a.noteDate||""));
+  $("#libList").innerHTML = items.length ? items.map(it=>cardHTML(it.article)).join("")
+    : `<div class="status">${esc(libQuery ? T("voiceLibNone").replace("{q}", ()=>libQuery) : T("libEmpty"))}</div>`;
+}
+
+$("#libJournalFilter").addEventListener("change", e=>{ libJournal = e.target.value; renderLibrary(); });
+
+function notesArray(){
+  const artNotes = Object.entries(DB.items)
+    .filter(([id,it])=>it.article && (it.note||"").trim())
+    .map(([id,it])=>({id: "art_"+id, type:"article", title: shownTitle(it.article), meta: (it.article.authors||"")+" — "+(it.article.journal||"")+" ("+(it.article.year||"")+")", url: it.article.url, free: it.article.free, note: it.note, noteDate: it.noteDate, articleId: id}));
+  
+  const freeNotes = Object.entries(DB.freeNotes || {})
+    .map(([id,n])=>({id: "free_"+id, type:"free", title: n.title || T("freeNoteTitle"), meta: "", url:"", free:false, note: n.text, noteDate: n.date, freeId: id}));
+
+  return [...artNotes, ...freeNotes].sort((a,b)=>(b.noteDate||"").localeCompare(a.noteDate||""));
+}
+
+function renderNotes(){
+  const list = notesArray();
+  $("#notesList").innerHTML = list.length ? list.map(item=>{
+    if(item.type === "article"){
+      return `<article class="card" data-id="${esc(item.articleId)}">
+        <h3>${esc(item.title)}</h3>
+        <p class="meta">${esc(item.meta)}</p>
+        <p class="meta"><b>${esc(T("date"))}:</b> ${esc(item.noteDate? new Date(item.noteDate).toLocaleString(DB.lang):"")}</p>
+        <textarea aria-label="${esc(T("writeNote"))}">${esc(item.note)}</textarea>
+        <div class="actions">
+          <button type="button" class="primary" data-act="save">${esc(T("saveNote"))}</button>
+          <button type="button" data-act="delnote">🗑 ${esc(T("delNote"))}</button>
+          <a class="safe${item.free?"":" official"}" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">${esc(item.free? "🔒 "+T("safeBtn"): T("officialBtn"))}</a>
+          <span class="msg" role="status"></span>
+        </div></article>`;
+    } else {
+      return `<article class="card" data-freeid="${esc(item.freeId)}">
+        <h3>📝 ${esc(item.title)}</h3>
+        <p class="meta"><b>${esc(T("date"))}:</b> ${esc(item.noteDate? new Date(item.noteDate).toLocaleString(DB.lang):"")}</p>
+        <textarea class="freetext" aria-label="${esc(T("writeNote"))}">${esc(item.note)}</textarea>
+        <div class="actions">
+          <button type="button" class="primary" data-act="savefreenote">${esc(T("saveNote"))}</button>
+          <button type="button" data-act="delfreenote">🗑 ${esc(T("delNote"))}</button>
+          <span class="msg" role="status"></span>
+        </div></article>`;
+    }
+  }).join("") : `<div class="status">${esc(T("notesEmpty"))}</div>`;
+}
+
+$("#newFreeNote").addEventListener("click", ()=>{
+  const id = "fn_" + Date.now();
+  if(!DB.freeNotes) DB.freeNotes = {};
+  DB.freeNotes[id] = {title: T("freeNoteTitle"), text: "", date: new Date().toISOString()};
+  saveDB(); renderNotes();
+});
+
+document.addEventListener("click", ev=>{
+  const btn = ev.target.closest("[data-act='savefreenote']");
+  if(!btn) return;
+  const card = btn.closest("article");
+  const freeId = card.dataset.freeid;
+  const txt = card.querySelector("textarea").value.trim();
+  if(DB.freeNotes && DB.freeNotes[freeId]){
+    DB.freeNotes[freeId].text = txt;
+    DB.freeNotes[freeId].date = new Date().toISOString();
+    saveDB();
+    const m = card.querySelector(".msg"); m.textContent = T("noteSaved");
+    setTimeout(()=>{ m.textContent=""; }, 2500);
+  }
+});
+
+function download(name, text, mime){
+  const blob = new Blob([text], {type:mime+";charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+const stamp = () => new Date().toISOString().slice(0,10);
+
+$("#expTxt").addEventListener("click",()=>{
+  const list = notesArray();
+  if(!list.length){ alert(T("notesEmpty")); return; }
+  const txt = "GerontoLib — " + T("notesTitle") + " (" + stamp() + ")\n" + "=".repeat(50) + "\n\n" +
+    list.map(it=> it.title + "\n" + (it.url? it.url+"\n":"") + T("date") + ": " + (it.noteDate? new Date(it.noteDate).toLocaleString(DB.lang):"") + "\n\n" + it.note + "\n\n" + "-".repeat(50) + "\n").join("\n");
+  download("GerontoLib-notas-" + stamp() + ".txt", txt, "text/plain");
+});
+$("#expJson").addEventListener("click",()=>{
+  download("GerontoLib-respaldo-" + stamp() + ".json", JSON.stringify({app:"GerontoLib", version:2, data:DB}, null, 2), "application/json");
+});
+$("#impBtn").addEventListener("click",()=> $("#impFile").click());
+$("#impFile").addEventListener("change", e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const rd = new FileReader();
+  const st = $("#notesStatus");
+  rd.onload = ()=>{
+    try{
+      const o = JSON.parse(rd.result);
+      if(!o || o.app!=="GerontoLib" || !o.data) throw new Error("bad");
+      if(o.data.items) Object.entries(o.data.items).forEach(([id,it])=>{ if(it && it.article) DB.items[id] = it; });
+      if(o.data.freeNotes) Object.entries(o.data.freeNotes).forEach(([id,fn])=>{ DB.freeNotes[id] = fn; });
+      saveDB(); renderLibrary(); renderNotes();
+      st.hidden=false; st.textContent = T("restoreOk");
+    }catch(err){ st.hidden=false; st.textContent = T("restoreErr"); }
+    e.target.value="";
+  };
+  rd.readAsText(file);
+});
+
+let lastHelp = null;
+function buildHelpChips(){
+  const box = $("#helpChips"); box.innerHTML = "";
+  GLOSSARY.forEach((g,i)=>{
+    const b = document.createElement("button"); b.type="button"; b.textContent = g.n[DB.lang];
+    b.addEventListener("click",()=>{ lastHelp={idx:i}; showHelp(lastHelp); });
+    box.appendChild(b);
+  });
+}
+function findConcept(text){
+  const s = stripAcc(text).trim(); if(!s) return -1;
+  let best=-1, bestLen=0;
+  GLOSSARY.forEach((g,i)=>g.k.forEach(k=>{
+    const kk = stripAcc(k);
+    if((s.includes(kk) || kk.includes(s)) && kk.length>bestLen && s.length>=3){ best=i; bestLen=kk.length; }
+  }));
+  return best;
+}
+function showHelp(h){
+  const box = $("#helpAnswer");
+  if(h.idx<0){
+    box.innerHTML = `<div class="answer"><p>${esc(T("helpNone"))}</p>` +
+      (h.text? `<div class="actions"><button type="button" class="primary" id="helpSearchBtn">${esc(T("helpSearch"))}</button></div>`:"") + `</div>`;
+    const sb = $("#helpSearchBtn"); if(sb) sb.onclick = ()=>{ $("#q").value=h.text; showTab("search"); runSearch(h.text,false); };
+    return;
+  }
+  const g = GLOSSARY[h.idx];
+  box.innerHTML = `<div class="answer"><h3>${esc(g.n[DB.lang])}</h3>
+    <p><b>${esc(T("simple"))}:</b></p><p>${esc(g.d[DB.lang])}</p>
+    <div class="actions"><button type="button" class="primary" id="helpSearchBtn">${esc(T("helpSearch"))}</button></div></div>`;
+  $("#helpSearchBtn").onclick = ()=>{ $("#q").value = g.n[DB.lang]; showTab("search"); runSearch(g.q, false); };
+}
+$("#helpForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const text = $("#hq").value;
+  lastHelp = {idx:findConcept(text), text:text.trim()};
+  showHelp(lastHelp);
+});
+
+/* =====================================================================
+   PANEL DE CONTROL / INTÉRPRETE DE INTENCIONES (IA o heurística local)
+   ===================================================================== */
+async function interpretAndExecute(userInput){
+  const text = userInput.trim();
+  const fb = $("#controlFeedback");
+  if(!text) return;
+  fb.style.color = "var(--primary)";
+  fb.textContent = T("aiThinking");
+
+  // Si hay IA configurada, dejamos que el modelo interprete y devuelva un comando estructurado
+  if(aiReady()){
+    try{
+      const sys = "You are the command interpreter for GerontoLib. The user will type a request in natural language. " +
+        "You must output ONLY a JSON object with keys: 'action' (one of: search, library, notes, help, font, lang, viewlib, unknown) and 'arg' (string parameter or empty). " +
+        "Examples: 'buscar alzhéimer' -> {\"action\":\"search\",\"arg\":\"alzhéimer\"}; 'ir a biblioteca' -> {\"action\":\"library\",\"arg\":\"\"}; 'poner letra grande' -> {\"action\":\"font\",\"arg\":\"large\"}; 'cambiar a ingles' -> {\"action\":\"lang\",\"arg\":\"en\"}";
+      const out = await groqChat([{role:"system",content:sys},{role:"user",content:text}], {max:100, temp:0.0});
+      const jsonMatch = out.match(/\{[\s\S]*\}/);
+      if(jsonMatch){
+        const cmd = JSON.parse(jsonMatch[0]);
+        executeCommandObject(cmd);
+        fb.style.color = "var(--green)";
+        fb.textContent = T("controlSuccess");
+        return;
+      }
+    }catch(e){ console.warn("AI intent failed, falling back to local", e); }
+  }
+
+  // Intérprete heurístico local robusto
+  const voiceParsed = parseVoice(text);
+  if(voiceParsed){
+    runVoice(voiceParsed);
+    fb.style.color = "var(--green)";
+    fb.textContent = T("controlSuccess");
+  } else {
+    // Si no coincide con nada estructurado, asumimos que es una búsqueda general
+    showTab("search"); $("#q").value = text; runSearch(text, false);
+    fb.style.color = "var(--green)";
+    fb.textContent = T("controlSuccess");
+  }
+}
+
+function executeCommandObject(cmd){
+  switch(cmd.action){
+    case "search": showTab("search"); $("#q").value = cmd.arg; runSearch(cmd.arg, false); break;
+    case "library": libQuery=""; libFilter="all"; $("#libSearch").value=""; showTab("library"); break;
+    case "notes": showTab("notes"); break;
+    case "help": showTab("help"); break;
+    case "font": DB.font = cmd.arg || "large"; saveDB(); applyFont(); break;
+    case "lang": DB.lang = cmd.arg || "es"; saveDB(); applyLang(); break;
+    case "viewlib": viewInLibrary(cmd.arg); break;
+    default: showTab("search"); $("#q").value = cmd.arg; runSearch(cmd.arg, false); break;
+  }
+}
+
+$("#controlForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const val = $("#controlInput").value;
+  $("#controlInput").value = "";
+  interpretAndExecute(val);
+});
+function setControlWidgetOpen(open){
+  $("#controlDrawer").hidden = !open;
+  $("#controlToggle").setAttribute("aria-expanded", String(open));
+  if(open) $("#controlInput").focus();
+  else $("#controlToggle").focus();
+}
+$("#controlToggle").addEventListener("click", ()=>setControlWidgetOpen($("#controlDrawer").hidden));
+$("#controlClose").addEventListener("click", ()=>setControlWidgetOpen(false));
+$("#controlDrawer").addEventListener("keydown", e=>{
+  if(e.key === "Escape") setControlWidgetOpen(false);
+});
+
+$("#searchForm").addEventListener("submit", e=>{ e.preventDefault(); runSearch($("#q").value, false); });
+$("#moreBtn").addEventListener("click", ()=>runSearch(current.query, current.raw, true));
+$("#sortSel").addEventListener("change", ()=>{ if(current.query) runSearch(current.query, current.raw); });
+$("#optOA").addEventListener("change", ()=>{ if(current.query) runSearch(current.query, current.raw); });
+$("#optAging").addEventListener("change", ()=>{ if(current.query && !current.raw) runSearch(current.query, false); });
+$("#lang").addEventListener("change", e=>{ DB.lang = e.target.value; saveDB(); applyLang(); });
+$$(".fontbtns button").forEach(b=>b.addEventListener("click",()=>{ DB.font=b.dataset.font; saveDB(); applyFont(); }));
+$$("nav [data-tab]").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+
+const AI_STORE = "gerontolib_ai_v1";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const DEFAULT_MODEL = "openai/gpt-oss-120b";
+let AI = { key:"", model:DEFAULT_MODEL, consent:false, auto:false };
+let chat = [];
+let aiBusy = false;
+
+function loadAI(){
+  try{ const o = JSON.parse(localStorage.getItem(AI_STORE)||"{}"); if(o && typeof o==="object") AI = Object.assign(AI,o); }catch(e){}
+}
+function saveAI(){ try{ localStorage.setItem(AI_STORE, JSON.stringify(AI)); }catch(e){} }
+const aiReady = () => !!(AI.key && AI.consent);
+
+function systemPrompt(){
+  const L = {es:"Spanish", en:"English", fr:"French"}[DB.lang] || "Spanish";
+  return "You are the assistant inside GerontoLib. Always answer in " + L + ". Keep answers clear and concise.";
+}
+
+function updateAI(){
+  $("#aiKey").value = AI.key || "";
+  $("#aiModel").value = AI.model || DEFAULT_MODEL;
+  $("#aiConsent").checked = !!AI.consent;
+  $("#aiAuto").checked = !!AI.auto;
+  $("#chatForm").hidden = !aiReady();
+  if(!aiReady()) $("#aiSettings").open = true;
+  renderChat();
+}
+function renderChat(){
+  const log = $("#chatLog");
+  if(!aiReady() && !chat.length){ log.innerHTML = `<div class="status">${esc(T("aiNeedKey"))}</div>`; return; }
+  log.innerHTML = chat.map(m=>
+    `<div class="bubble ${m.role==="user"?"me":"ai"}${m.error?" err":""}"><b>${esc(m.role==="user"?T("aiYou"):T("aiBot"))}</b><div class="txt">${esc(m.shown||m.content)}</div></div>`
+  ).join("") + (aiBusy ? `<div class="bubble ai"><i>${esc(T("aiThinking"))}</i></div>` : "");
+}
+
+async function groqChat(messages, opts){
+  opts = opts || {};
+  const isOss = /gpt-oss/i.test(AI.model);
+  const call = async (withEffort) => {
+    const body = {model:AI.model, messages, temperature:(opts.temp==null?0.3:opts.temp), max_tokens:(opts.max||2000)};
+    if(withEffort && isOss) body.reasoning_effort = "low";
+    const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), 60000);
+    try{
+      const res = await fetch(GROQ_URL, {
+        method:"POST", signal:ctl.signal,
+        headers:{"Content-Type":"application/json", "Authorization":"Bearer "+AI.key},
+        body: JSON.stringify(body)
+      });
+      if(!res.ok) throw Object.assign(new Error("HTTP "+res.status), {code:res.status});
+      return await res.json();
+    } finally { clearTimeout(to); }
+  };
+  let data;
+  try{ data = await call(true); }
+  catch(e){ if(e.code===400 && isOss) data = await call(false); else throw e; }
+  return ((data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "").trim();
+}
+
+function aiErrKey(e){
+  if(e && (e.code===401 || e.code===403)) return "aiErrKey";
+  if(e && e.code===429) return "aiErrRate";
+  if(e && (e.code===400 || e.code===404)) return "aiErrModel";
+  return "aiErrNet";
+}
+
+async function sendAI(text, shown){
+  if(aiBusy) return;
+  text = (text||"").trim(); if(!text) return;
+  if(!aiReady()){ updateAI(); return; }
+  chat.push({role:"user", content:text, shown:shown||text});
+  aiBusy = true; renderChat();
+  const msgs = [{role:"system", content:systemPrompt()}]
+    .concat(chat.filter(m=>!m.error).slice(-8).map(m=>({role:m.role, content:m.content})));
+  try{
+    const out = await groqChat(msgs, {max:2500, temp:0.3});
+    chat.push({role:"assistant", content: out || "…"});
+  }catch(e){
+    chat.push({role:"assistant", content:T(aiErrKey(e)), error:true});
+  }
+  aiBusy = false; renderChat();
+}
+
+function askAboutArticle(a){
+  showTab("help");
+  const p = T("askPrompt").replace("{t}",()=>a.title).replace("{j}",()=>a.journal||"-")
+    .replace("{y}",()=>a.year||"-").replace("{a}",()=>(a.abstract||"").slice(0,1800)||"-");
+  sendAI(p, "🤖 " + a.title);
+}
+
+$("#aiSave").addEventListener("click", ()=>{
+  AI.key = $("#aiKey").value.trim();
+  AI.model = $("#aiModel").value.trim() || DEFAULT_MODEL;
+  AI.consent = $("#aiConsent").checked;
+  AI.auto = $("#aiAuto").checked;
+  saveAI(); updateAI();
+  $("#aiStatus").textContent = aiReady() ? T("aiSaved") : T("aiNeedKey");
+});
+$("#aiRemove").addEventListener("click", ()=>{
+  AI.key = ""; AI.consent = false; saveAI(); chat = []; updateAI();
+  $("#aiStatus").textContent = T("aiRemoved");
+});
+$("#chatForm").addEventListener("submit", e=>{
+  e.preventDefault(); const t = $("#chatInput").value; $("#chatInput").value = ""; sendAI(t);
+});
+$("#chatClear").addEventListener("click", ()=>{ chat = []; renderChat(); });
+
+const TR_STORE = "gerontolib_tr_v1";
+const LANG_NAME = {es:"Spanish", en:"English", fr:"French"};
+const ISO3 = {eng:"en",spa:"es",fre:"fr",fra:"fr",ger:"de",deu:"de",por:"pt",ita:"it",chi:"zh",zho:"zh",jpn:"ja",rus:"ru",dut:"nl",nld:"nl"};
+let TR = {};
+const origView = new Set();
+const trBusy = new Set();
+let autoBusy = false;
+
+function loadTR(){ try{ TR = JSON.parse(localStorage.getItem(TR_STORE)||"{}") || {}; }catch(e){ TR = {}; } }
+function saveTR(){
+  try{
+    const keys = Object.keys(TR);
+    if(keys.length > 200) keys.slice(0, keys.length-200).forEach(k=>delete TR[k]);
+    localStorage.setItem(TR_STORE, JSON.stringify(TR));
+  }catch(e){}
+}
+const trKey = id => id + "|" + DB.lang;
+const getTR = id => TR[trKey(id)] || null;
+const srcLang = a => ISO3[String(a.lang||"eng").toLowerCase()] || "en";
+const needsTranslation = a => srcLang(a) !== DB.lang;
+function decodeEntities(s){ const t = document.createElement("textarea"); t.innerHTML = s; return t.value; }
+
+function chunkText(s, max){
+  const out = []; let cur = "";
+  (String(s).match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) || [String(s)]).forEach(sent=>{
+    sent = sent.trim(); if(!sent) return;
+    if(sent.length > max){
+      if(cur){ out.push(cur); cur = ""; }
+      for(let i=0; i<sent.length; i+=max) out.push(sent.slice(i, i+max));
+      return;
+    }
+    if((cur+" "+sent).trim().length > max){ out.push(cur); cur = sent; } else cur = (cur+" "+sent).trim();
+  });
+  if(cur) out.push(cur);
+  return out;
+}
+
+async function translateGroq(a){
+  const L = LANG_NAME[DB.lang];
+  const sys = "You are a precise scientific translator. Output only the requested format.";
+  const user = "Translate article title and abstract into " + L + ".\nFORMAT:\n###TITLE###\n<translated>\n###ABSTRACT###\n<translated>\n\nTITLE: " + a.title + "\nABSTRACT: " + (a.abstract || "(none)");
+  const out = await groqChat([{role:"system",content:sys},{role:"user",content:user}], {max:3500, temp:0.1});
+  const m = out.match(/###TITLE###\s*([\s\S]*?)\s*###ABSTRACT###\s*([\s\S]*)$/);
+  if(!m) throw new Error("format");
+  return {t:m[1].trim(), ab: a.abstract ? m[2].trim() : ""};
+}
+
+async function translateTitlesGroq(list){
+  const L = LANG_NAME[DB.lang];
+  const lines = list.map((a,i)=>(i+1)+". "+a.title).join("\n");
+  const out = await groqChat([
+    {role:"system", content:"Translate scientific article titles into "+L+". One per line."},
+    {role:"user", content:lines}
+  ], {max:2500, temp:0.1});
+  const res = [];
+  out.split(/\n+/).forEach(l=>{
+    const m = l.match(/^\s*(\d+)[.)]\s*(.+)$/);
+    if(m && list[+m[1]-1]) res.push({a:list[+m[1]-1], t:m[2].trim()});
+  });
+  return res;
+}
+
+async function mmOne(text, src, tgt){
+  const url = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text) + "&langpair=" + src + "|" + tgt;
+  const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), 20000);
+  let d;
+  try{
+    const res = await fetch(url, {signal:ctl.signal});
+    if(!res.ok) throw Object.assign(new Error("HTTP "+res.status), {code:res.status, quota:res.status===429});
+    d = await res.json();
+  } finally { clearTimeout(to); }
+  const out = (d && d.responseData && d.responseData.translatedText) || "";
+  if(String(d && d.responseStatus)==="429" || (d && d.quotaFinished)) throw Object.assign(new Error("quota"), {quota:true});
+  return decodeEntities(out);
+}
+
+async function translateMM(a){
+  const src = srcLang(a), tgt = DB.lang;
+  let t = "";
+  for(const c of chunkText(a.title, 400)) t += (t?" ":"") + await mmOne(c, src, tgt);
+  let ab = "";
+  if(a.abstract){
+    const part = a.abstract.length > 1500 ? a.abstract.slice(0,1500) + " […]" : a.abstract;
+    for(const c of chunkText(part, 400)) ab += (ab?" ":"") + await mmOne(c, src, tgt);
+  }
+  return {t, ab};
+}
+
+function refreshCard(id){
+  const a = getArticle(id); if(!a) return;
+  document.querySelectorAll("#results article.card, #libList article.card").forEach(old=>{
+    if(old.dataset.id !== id) return;
+    const p = old.querySelector(".abstract");
+    const nb = old.querySelector(".notebox");
+    const draft = nb ? nb.querySelector("textarea").value : "";
+    const wasAbs = !!(p && !p.hidden), wasNote = !!(nb && !nb.hidden);
+    const tmp = document.createElement("div"); tmp.innerHTML = cardHTML(a);
+    const nw = tmp.firstElementChild;
+    const np = nw.querySelector(".abstract");
+    if(np && wasAbs){ np.hidden = false; const b = nw.querySelector('[data-act="abs"]'); if(b) b.textContent = T("hideAbs"); }
+    const nn = nw.querySelector(".notebox");
+    if(nn){ nn.querySelector("textarea").value = draft; nn.hidden = !wasNote; }
+    old.replaceWith(nw);
+  });
+}
+function showCardMsg(id, msg){
+  document.querySelectorAll("#results article.card, #libList article.card").forEach(c=>{
+    if(c.dataset.id === id){ const m = c.querySelector(".trmsg"); if(m) m.textContent = msg; }
+  });
+}
+
+async function translateArticle(id){
+  const a = getArticle(id); if(!a || trBusy.has(id)) return;
+  if(!aiReady() && !DB.mmOk){
+    if(!confirm(T("trConsentMM"))) return;
+    DB.mmOk = true; saveDB();
+  }
+  trBusy.add(id); refreshCard(id);
+  let msg = "";
+  try{
+    let r, by;
+    if(aiReady()){ r = await translateGroq(a); by = "Groq AI"; }
+    else { r = await translateMM(a); by = "MyMemory"; }
+    TR[trKey(id)] = {t:r.t, a:r.ab, by};
+    saveTR(); origView.delete(id);
+  }catch(e){
+    if(e && e.quota) msg = T("trErrQuota");
+    else msg = T("trErr");
+  }
+  trBusy.delete(id); refreshCard(id);
+  if(msg) showCardMsg(id, msg);
+}
+
+async function autoTranslateTitles(){
+  if(autoBusy || !AI.auto || !aiReady()) return;
+  const list = order.map(id=>seen[id]).filter(a=>a && needsTranslation(a) && !getTR(a.id)).slice(0, 12);
+  if(!list.length) return;
+  autoBusy = true;
+  try{
+    const res = await translateTitlesGroq(list);
+    res.forEach(x=>{ TR[trKey(x.a.id)] = {t:x.t, a:"", by:"Groq AI"}; });
+    saveTR(); res.forEach(x=>refreshCard(x.a.id));
+  }catch(e){}
+  autoBusy = false;
+}
+
+const QSTOP = new Set(["de","del","la","el","los","las","un","una","y","the","of","and","a","an","le","les","des","du","et"]);
+function norm(s){ return stripAcc(String(s||"")).replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim(); }
+function matchesQuery(a, q){
+  const words = norm(q).split(" ").filter(w=>w.length>1 && !QSTOP.has(w));
+  if(!words.length) return true;
+  const tr = getTR(a.id);
+  const h = norm([a.title, tr && tr.t, a.authors, a.journal].filter(Boolean).join(" "));
+  const hit = words.filter(w=>h.includes(w)).length;
+  return hit === words.length || (words.length >= 3 && hit/words.length >= 0.7);
+}
+$("#libSearch").addEventListener("input", e=>{ libQuery = e.target.value; renderLibrary(); });
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const VOICE_LANG = {es:"es-ES", en:"en-US", fr:"fr-FR"};
+let rec = null, listening = false, voiceTimer = null;
+
+const NAV_STOP = new Set(("ir ve vamos abrir abre mostrar muestra ver a al la el en mi mis go to open show view the my aller va allons ouvrir ouvre afficher montre voir le les ma mes dans sur de d l " +
+  "section pestana tab pagina page onglet seccion por favor please s il vous plait svp").split(" "));
+const NAV_TARGETS = {
+  library:["biblioteca","library","bibliotheque","libreria"],
+  notes:["notas","notas medicas","notes","medical notes","notes medicales","cuaderno","notebook"],
+  search:["buscar","buscador","busqueda","search","recherche","rechercher","inicio","home","accueil"],
+  help:["ayuda","asistente","asistente ia","help","ai assistant","assistant","assistant ia","aide"]
+};
+
+function parseVoice(raw){
+  const s = norm(raw); if(!s) return null;
+  let m;
+  m = s.match(/^(?:ver|ve|mostrar|muestra|muestrame|busca|buscar|show|view|find|search|voir|montre|montrer|afficher|cherche|chercher|rechercher)\s+(?:en|in|dans)\s+(?:la\s+|le\s+|mi\s+|mis\s+|my\s+|the\s+|ma\s+)?(?:biblioteca|library|bibliotheque)\s+(.+)$/);
+  if(m) return {type:"viewlib", arg:m[1]};
+  const rest = s.split(" ").filter(w=>!NAV_STOP.has(w)).join(" ");
+  for(const tab of Object.keys(NAV_TARGETS)) if(NAV_TARGETS[tab].includes(rest)) return {type:"nav", arg:tab};
+  m = s.match(/^(?:buscar|busca|busque|buscame|encuentra|search|find|look for|look up|rechercher|recherche|cherche|chercher|trouve)\s+(.+)$/);
+  if(m){
+    const q = m[1].replace(/^(?:(?:articulos?|articles?|papers?|estudios?|studies|etudes?)\s+)?(?:sobre|acerca de|de|about|on|for|sur|pour)\s+/, "");
+    return {type:"search", arg:q || m[1]};
+  }
+  if(/\b(letra|texto|fuente|text|font|police|texte|taille|size|tamano)\b/.test(s)){
+    if(/\b(extra|muy grande|very large|tres grand|maximo)\b/.test(s)) return {type:"font", arg:"xlarge"};
+    if(/\b(grande|large|grand|aumenta\w*|bigger|agrand\w*|mayor)\b/.test(s)) return {type:"font", arg:"large"};
+    if(/\b(normal|chica|pequena|small|petit\w*|reduc\w*|menor)\b/.test(s)) return {type:"font", arg:"normal"};
+  }
+  if(/\b(idioma|language|langue|cambiar|cambia|switch|change|passer|passe|pon|poner|parler)\b/.test(s)){
+    if(/\b(espanol|spanish|castellano|espagnol)\b/.test(s)) return {type:"lang", arg:"es"};
+    if(/\b(ingles|english|anglais)\b/.test(s)) return {type:"lang", arg:"en"};
+    if(/\b(frances|french|francais)\b/.test(s)) return {type:"lang", arg:"fr"};
+  }
+  if(/^(?:mas resultados|mostrar mas|ver mas|mas|more results|show more|more|plus de resultats|plus|afficher plus|voir plus)$/.test(s)) return {type:"more"};
+  if(/\b(comandos|ayuda de voz|que puedo decir|voice commands|commands|what can i say|commandes|que puis je dire)\b/.test(s)) return {type:"vhelp"};
+  return null;
+}
+
+function say(msg, kind){
+  const bar = $("#voiceBar");
+  $("#voiceText").textContent = msg;
+  bar.hidden = false; bar.classList.toggle("err", kind === "err");
+  clearTimeout(voiceTimer);
+  if(!listening) voiceTimer = setTimeout(()=>{ bar.hidden = true; }, 15000);
+}
+function updateVoiceUI(){
+  const b = $("#micBtn");
+  b.textContent = listening ? T("micOn") : T("micBtn");
+  b.classList.toggle("on", listening);
+  b.setAttribute("aria-pressed", String(listening));
+}
+function renderVoiceHelp(){
+  $("#voiceList").innerHTML = (T("voiceList") || []).map(x=>"<li>"+esc(x)+"</li>").join("");
+}
+
+function viewInLibrary(q){
+  libQuery = q; libFilter = "all"; $("#libSearch").value = q;
+  showTab("library");
+  const n = Object.values(DB.items).filter(it=>it.article && matchesQuery(it.article, q)).length;
+  if(n) say("✔ " + T("voiceLibFound").replace("{n}", ()=>n).replace("{q}", ()=>q));
+  else say(T("voiceLibNone").replace("{q}", ()=>q), "err");
+  const c = $("#libList .card");
+  if(c){ c.classList.add("hl"); c.scrollIntoView({behavior:"smooth", block:"center"}); }
+}
+
+function runVoice(cmd){
+  const tabKey = {library:"tabLibrary", notes:"tabNotes", search:"tabSearch", help:"tabHelp"};
+  switch(cmd.type){
+    case "nav":
+      if(cmd.arg === "library"){ libQuery = ""; libFilter = "all"; $("#libSearch").value = ""; }
+      showTab(cmd.arg); say("✔ " + T("voiceOk") + ": " + T(tabKey[cmd.arg])); break;
+    case "search":
+      showTab("search"); $("#q").value = cmd.arg; runSearch(cmd.arg, false);
+      say("✔ " + T("voiceSearching") + ": “" + cmd.arg + "”"); break;
+    case "viewlib": viewInLibrary(cmd.arg); break;
+    case "font": DB.font = cmd.arg; saveDB(); applyFont(); say("✔ " + T("voiceOk")); break;
+    case "lang": DB.lang = cmd.arg; saveDB(); applyLang(); say("✔ " + T("voiceOk")); break;
+    case "more":
+      if(!$("#moreBtn").hidden && !$("#panel-search").hidden){ $("#moreBtn").click(); say("✔ " + T("voiceOk")); }
+      else say(T("voiceNoMore"), "err");
+      break;
+    case "vhelp":
+      showTab("help"); $("#voiceHelp").open = true; $("#voiceHelp").scrollIntoView({behavior:"smooth"}); say("✔ " + T("voiceOk")); break;
+  }
+}
+
+function startVoice(){
+  if(!SR){ say(T("voiceNoSupport"), "err"); return; }
+  if(listening && rec){ rec.stop(); return; }
+  if(!DB.voiceOk){
+    if(!confirm(T("voiceConsent"))) return;
+    DB.voiceOk = true; saveDB();
+  }
+  rec = new SR();
+  rec.lang = VOICE_LANG[DB.lang] || "es-ES";
+  rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+  let heard = "", errCode = "";
+  rec.onstart = () => { listening = true; updateVoiceUI(); say(T("voiceListening")); };
+  rec.onresult = e => {
+    let fin = "", interim = "";
+    for(let i=0; i<e.results.length; i++){
+      const r = e.results[i];
+      if(r.isFinal) fin += r[0].transcript + " "; else interim += r[0].transcript;
+    }
+    heard = (fin + interim).trim();
+    say("🎤 “" + heard + "”");
+  };
+  rec.onerror = e => { errCode = e.error || "error"; };
+  rec.onend = () => {
+    listening = false; updateVoiceUI();
+    if(errCode && errCode !== "no-speech" && errCode !== "aborted"){
+      const k = (errCode==="not-allowed" || errCode==="service-not-allowed") ? "voiceErrPerm" : (errCode==="network" ? "voiceErrNet" : null);
+      say(k ? T(k) : T("voiceErr"), "err"); return;
+    }
+    if(!heard){ say(T("voiceNoSpeech"), "err"); return; }
+    
+    // Interpretación avanzada mediante IA o análisis de voz
+    interpretAndExecute(heard);
+  };
+  try{ rec.start(); }catch(e){ say(T("voiceErr"), "err"); }
+}
+
+$("#micBtn").addEventListener("click", startVoice);
+$("#voiceClose").addEventListener("click", ()=>{ $("#voiceBar").hidden = true; });
+$("#voiceHelpBtn").addEventListener("click", ()=>runVoice({type:"vhelp"}));
+
+loadDB(); loadAI(); loadTR(); applyFont(); applyLang(); showTab("search");
+
+if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>
